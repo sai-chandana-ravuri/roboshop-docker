@@ -1,12 +1,49 @@
 services:
+  catalogue:
+    build: 
+      dockerfile: catalogue.Dockerfile
+    image: rchandana/mongodb:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
+    container_name: mongodb
+    depends_on: 
+    - mongodb
+  user:
+    build: 
+      dockerfile: user.Dockerfile
+    image: rchandana/user:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
+    container_name: user
+    depends_on: 
+    - redis
+  frontend:
+    build: 
+      dockerfile: frontend.Dockerfile
+    image: rchandana/frontend:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
+    container_name: frontend
+    ports:
+    - "80:80"
+    depends_on: 
+    - catalogue
+    - user
+    - cart
+    - shipping
+    - payment
+  redis:
+    image: redis:7.0
+    container_name: redis
+  cart:
+    build: 
+      dockerfile: cart.Dockerfile
+    image: rchandana/cart:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
+    container_name: cart
+    depends_on: 
+    - mongodb
   mongodb:
     build:
       dockerfile: mongodb.Dockerfile #it moves to mongodb directly
     image: rchandana/mongodb:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
-    contianer_name: mongodb
+    container_name: mongodb
 networks:
   default:
     driver: bridge
     name: roboshop
-    
+    external: false #if true, we need to create network manually
 
