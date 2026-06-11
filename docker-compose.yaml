@@ -1,0 +1,12 @@
+services:
+  mongodb:
+    build:
+      dockerfile: mongodb.Dockerfile #it moves to mongodb directly
+    image: rchandana/mongodb:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
+    contianer_name: mongodb
+networks:
+  default:
+    driver: bridge
+    name: roboshop
+    
+
