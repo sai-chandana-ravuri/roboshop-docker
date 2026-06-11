@@ -1,21 +1,19 @@
 services:
   catalogue:
-    build: 
-      dockerfile: catalogue.Dockerfile
+    build: ./catalogue
     image: rchandana/mongodb:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
     container_name: mongodb
     depends_on: 
     - mongodb
   user:
-    build: 
-      dockerfile: user.Dockerfile
+    build: ./user
     image: rchandana/user:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
     container_name: user
     depends_on: 
     - redis
+    - mongodb
   frontend:
-    build: 
-      dockerfile: frontend.Dockerfile
+    build: ./frontend
     image: rchandana/frontend:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
     container_name: frontend
     ports:
@@ -30,15 +28,39 @@ services:
     image: redis:7.0
     container_name: redis
   cart:
-    build: 
-      dockerfile: cart.Dockerfile
+    build: ./cart
     image: rchandana/cart:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
     container_name: cart
     depends_on: 
-    - mongodb
+    - redis
+    - catalogue
+  shipping:
+    build: ./shipping
+    image: rchandana/shipping:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
+    container_name: shipping
+    depends_on: 
+    - mysql
+    - cart
+  payment:
+    build: ./payment
+    image: rchandana/payment:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
+    container_name: payment
+    depends_on: 
+    - redis
+    - cart
+    - user
+  rabbitmq:
+    image: rabbitmq:3
+    environment:
+      RABBITMQ_DEFAULT_USER: roboshop
+      RABBITMQ_DEFAULT_PASS: roboshop123
+    container_name: rabbitmq
+  mysql:
+    build: ./mysql
+    image: rchandana/mysql:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
+    container_name: mysql
   mongodb:
-    build:
-      dockerfile: mongodb.Dockerfile #it moves to mongodb directly
+    build: ./mongodb #it moves to mongodb directly
     image: rchandana/mongodb:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
     container_name: mongodb
 networks:
