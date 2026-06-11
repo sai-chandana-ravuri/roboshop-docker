@@ -2,7 +2,7 @@ services:
   catalogue:
     build: ./catalogue
     image: rchandana/mongodb:1.0.0   #this is equivalent to docker build -t rchandana/mongodb:1.0.0
-    container_name: mongodb
+    container_name: catalogue
     depends_on: 
     - mongodb
   user:
