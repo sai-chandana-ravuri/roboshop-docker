@@ -17,7 +17,8 @@ RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
 RUN chown -R roboshop:roboshop /app
 USER roboshop
 #This is because, to start this as a service   
-CMD ["node", "server.js"]            
+CMD ["server.js"]
+ENTRYPOINT ["node"]           
 # FROM node:20
 # WORKDIR /app
 # COPY package.json .
